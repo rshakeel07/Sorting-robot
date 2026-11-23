@@ -17,6 +17,7 @@
 #define XMAX 1         // max x length
 #define YMAX 1         // max y height
 #define ARRLENGTH 100  // max number of boxes in the box array
+#define CLAWTIMEOUT 2  // max seconds the claw motor runs in one move before stopping
 
 // ---------- Devices (the only globals; defined once in main.cpp) ----------
 extern vex::brain Brain;

@@ -8,16 +8,18 @@ void claw (bool open, double speed, double percentage) // moves claw either open
     double target = (percentage / 100) * max; // calculate target angle based on percentage
 
     clawMotor.resetPosition(); // measure the move from where the claw is now
+    timer clawTimer; // stops the claw if it gets blocked (e.g. by a box) before reaching the target
+    clawTimer.clear();
     if (open)
     {
         clawMotor.spin(forward, speed, percent);
-        while (clawMotor.position(degrees) < target)
+        while (clawMotor.position(degrees) < target && clawTimer.time(seconds) < CLAWTIMEOUT)
         {}
     }
     else
     {
         clawMotor.spin(reverse, speed, percent);
-        while (clawMotor.position(degrees) > -target)
+        while (clawMotor.position(degrees) > -target && clawTimer.time(seconds) < CLAWTIMEOUT)
         {}
     }
     clawMotor.stop(brake);
