@@ -8,7 +8,7 @@ bool calibrateGantry() {
   double rackPitchMmPerTurn = 40.0; // mm of rack travel per 1 motor turn 
   double gantryLengthMm = 400.0;
   double timeoutSeconds = 15.0;  // safety time limit per move
-  color homeColor = red;  // optical color detected at home (0, 0), maybe detecting black would be better
+  // the claw must be raised to the top (y = 0) by hand before starting, since there is no sensor at the top of the y axis
 
   TouchLED9.on(yellow);
   Brain.Screen.clearScreen();
@@ -38,7 +38,9 @@ bool calibrateGantry() {
   double maxTurnsLimit = maxTurnsExpected * 1.15; // allowing for small uncertainty margin
 
   // return along the rack and pinion to (0, 0) position
-  Optical3.setLight(ledState::on);
+  // light stays off so the sensor reads dark (brightness near 0) when the carriage covers it at home
+  // (with the light on, it would see its own light reflecting off the carriage and read bright)
+  Optical3.setLight(ledState::off);
   safetyTimer.clear();
   xMotor.spin(reverse, 30, percent);
 
@@ -48,18 +50,20 @@ bool calibrateGantry() {
         xMotor.position(turns)*xMotor.position(turns) < maxTurnsLimit*maxTurnsLimit && 
         safetyTimer.time(seconds) < timeoutSeconds) {
     
-            if (Optical3.color() == homeColor) {
+            if (Optical3.brightness() <= HOMEBRIGHTNESS) { // sensor is covered, so the carriage is home
                 foundHome = true;
             }
   }
   xMotor.stop(brake);
-  Optical3.setLight(ledState::off);
 
-  //  zero x and y
+  //  zero x and y (y = 0 is where the claw was set by hand)
   xMotor.resetPosition();
   xMotor.setPosition(0, turns);
   yMotor.resetPosition();
   yMotor.setPosition(0, turns);
+
+  // open the claw fully and zero its position
+  clawres();
 
   if (foundHome) {
     TouchLED9.on(green);

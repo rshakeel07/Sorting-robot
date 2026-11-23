@@ -20,6 +20,7 @@
 #define YMAX 1         // max y height (mm)
 #define ARRLENGTH 100  // max number of boxes in the box array
 #define CLAWTIMEOUT 2  // max seconds the claw motor runs in one move before stopping
+#define HOMEBRIGHTNESS 2 // optical brightness (%) at or below which the sensor counts as covered (carriage is home)
 
 // scanning
 #define SCANSPEED 1    // slow, constant x motor speed while scanning (percent)
