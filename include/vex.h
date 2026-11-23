@@ -10,14 +10,23 @@
 #include "iq2_cpp.h"
 
 // ---------- Constants (placeholder values, tune during hardware testing) ----------
-#define CONVERSION_X 1 // motor turns per unit of x distance (rack and pinion)
-#define CONVERSION_Y 1 // motor turns per unit of y distance (lead screw)
+// all distances are in mm
+#define CONVERSION_X 1 // motor turns per mm of x travel (rack and pinion)
+#define CONVERSION_Y 1 // motor turns per mm of y travel (lead screw)
 #define SPEED 1        // default motor speed (percent)
-#define BOXWIDTH 1     // how far to close the claw on a box (percent of max claw angle)
-#define XMAX 1         // max x length
-#define YMAX 1         // max y height
+#define CLAWCLOSE 1    // how far to close the claw on a box (percent of max claw angle)
+#define BOXWIDTH 1     // width of a box along the rail (mm), all boxes are the same width
+#define XMAX 1         // max x length (mm)
+#define YMAX 1         // max y height (mm)
 #define ARRLENGTH 100  // max number of boxes in the box array
 #define CLAWTIMEOUT 2  // max seconds the claw motor runs in one move before stopping
+
+// scanning
+#define SCANSPEED 1    // slow, constant x motor speed while scanning (percent)
+#define SCANHEIGHT 1   // distance sensor reading (mm) with the claw at y = 0 and nothing underneath
+#define BOXTHRESHOLD 1 // how much shorter (mm) the reading must be to count as a box (filters out noise)
+#define BOXTIMEOUT 5   // max seconds a real box takes to pass under the sensor at SCANSPEED
+#define BUFFER 10      // gap left on each side of a box when placing it (mm)
 
 // ---------- Devices (the only globals; defined once in main.cpp) ----------
 extern vex::brain Brain;
@@ -31,8 +40,12 @@ extern vex::touchled TouchLED9;
 
 // ---------- Functions (so every file can call them) ----------
 void fillarray(double arr[ARRLENGTH][2]);                       // Arrayfill.cpp
-bool boxdetect();                                               // Box.cpp
+bool boxdetect(double &minDistance);                            // Box.cpp
 void nobox();                                                   // Box.cpp
+bool scanend(bool forwardScan);                                 // DataCollection.cpp
+int dataCollection(double boxes[ARRLENGTH][2], bool forwardScan, double &x_cur, double &y_cur); // DataCollection.cpp
+double findspot(double startX, double &x_cur, double &y_cur);   // Sorting.cpp
+bool sorting(double boxes[ARRLENGTH][2], int m, double &x_cur, double &y_cur); // Sorting.cpp
 bool calibrateGantry();                                         // Calibrate_Gantry.cpp
 void claw(bool open, double speed, double percentage);          // Claw.cpp
 void clawres();                                                 // Claw.cpp

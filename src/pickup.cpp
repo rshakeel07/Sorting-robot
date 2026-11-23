@@ -7,10 +7,10 @@ using namespace vex;
 void pickupandplace(double xbox, double ybox, double &x_cur, double &y_cur, double x_tar, double y_tar)
 {
     moveto(xbox, YMAX - ybox, x_cur, y_cur, SPEED); // moves to right above the block
-    claw(false, SPEED, BOXWIDTH); // closes claw around box
+    claw(false, SPEED, CLAWCLOSE); // closes claw around box
     moveto(x_cur, 0, x_cur, y_cur, SPEED); // lifts box straight up
     moveto(x_tar, y_tar, x_cur, y_cur, SPEED); // moves to target x / y coordinates
-    claw(true, SPEED, BOXWIDTH); // opens claw
+    claw(true, SPEED, CLAWCLOSE); // opens claw
     moveto(x_cur, 0, x_cur, y_cur, SPEED); // raises claw back to the top
 }
 
