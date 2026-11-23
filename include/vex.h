@@ -28,6 +28,7 @@
 #define BOXTHRESHOLD 1 // how much shorter (mm) the reading must be to count as a box (filters out noise)
 #define BOXTIMEOUT 5   // max seconds a real box takes to pass under the sensor at SCANSPEED
 #define BUFFER 10      // gap left on each side of a box when placing it (mm)
+#define HEIGHTTOLERANCE 3 // heights this close (mm) count as equal when verifying, to allow for sensor jitter
 
 // ---------- Devices (the only globals; defined once in main.cpp) ----------
 extern vex::brain Brain;
@@ -47,6 +48,8 @@ bool scanend(bool forwardScan);                                 // DataCollectio
 int dataCollection(double boxes[ARRLENGTH][2], bool forwardScan, double &x_cur, double &y_cur); // DataCollection.cpp
 double findspot(double startX, double &x_cur, double &y_cur);   // Sorting.cpp
 bool sorting(double boxes[ARRLENGTH][2], int m, double &x_cur, double &y_cur); // Sorting.cpp
+bool verifysort(int m, double &x_cur, double &y_cur);           // Verify.cpp
+void shutdown(double &x_cur, double &y_cur);                    // Shutdown.cpp
 bool calibrateGantry();                                         // Calibrate_Gantry.cpp
 void claw(bool open, double speed, double percentage);          // Claw.cpp
 void clawres();                                                 // Claw.cpp
