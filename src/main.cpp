@@ -11,6 +11,8 @@ vex::brain Brain;
 #define BOXWIDTH 1 // box width for closing grippers
 #define XMAX 1 //max x length
 #define YMAX 1 // max y height
+#define ARRLENGTH 100 // max length of array
+
 
 int main() 
 {

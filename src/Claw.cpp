@@ -18,6 +18,7 @@ void claw (bool open, double speed, double percentage) // moves claw either open
 
 void clawres()
 {
+    leftMotor.spin(forward, SPEED, percent);
+    wait(2, seconds);
     clawMotor.resetPosition();
-    
 }
