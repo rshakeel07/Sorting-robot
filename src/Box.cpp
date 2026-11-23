@@ -1,9 +1,14 @@
+#include "vex.h"
+
+using namespace vex;
+
 bool boxdetect()
 {
-    if (Distance4.objectDistance() < YMAX - 5)
+    if (Distance4.objectDistance(mm) < YMAX - 5)
     {
-        return true
+        return true;
     }
+    return false;
 }
 
 void nobox()

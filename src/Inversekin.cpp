@@ -2,22 +2,47 @@
 
 using namespace vex;
 
-// A global instance of vex::brain used for printing to the IQ2 brain screen
-vex::brain       Brain;
-
-// define your global instances of motors and other devices here
-
-#define CONVERSION_X 1 // arbitrary value for conversion factor of distance to motor turns
-#define CONVERSION_Y 1 // same but for y
-
-void moveto(double x_tar, double y_tar, double x_cur, double y_cur, double speed)
+// moves the claw to (x_tar, y_tar), then updates x_cur / y_cur (passed by reference so the caller sees the new position)
+// uses the motor encoders' absolute positions, which calibrateGantry() zeroes at home (0, 0)
+void moveto(double x_tar, double y_tar, double &x_cur, double &y_cur, double speed)
 {
-    double delta_x = (x_tar - x_cur) * CONVERSION_X;
-    double delta_y = (y_tar - y_cur) * CONVERSION_Y; // x / y values are now put into turns of x / y
+    // only move if the target is inside the gantry
+    if (x_tar >= 0 && x_tar <= XMAX && y_tar >= 0 && y_tar <= YMAX)
+    {
+        double x_turns = x_tar * CONVERSION_X;
+        double y_turns = y_tar * CONVERSION_Y; // x / y targets are now in motor turns
 
-    xMotor.spinFor(forward, delta_x, turns, speed, percent, true);
-    yMotor.spinFor(forward, delta_y, turns, speed, percent, true); // the true makes it so that the next command is only done after this one is completed
+        // move x
+        if (x_tar > x_cur)
+        {
+            xMotor.spin(forward, speed, percent);
+            while (xMotor.position(turns) < x_turns)
+            {}
+        }
+        else if (x_tar < x_cur)
+        {
+            xMotor.spin(reverse, speed, percent);
+            while (xMotor.position(turns) > x_turns)
+            {}
+        }
+        xMotor.stop(brake);
 
-    x_cur = x_tar;
-    y_cur = y_tar;
+        // then move y
+        if (y_tar > y_cur)
+        {
+            yMotor.spin(forward, speed, percent);
+            while (yMotor.position(turns) < y_turns)
+            {}
+        }
+        else if (y_tar < y_cur)
+        {
+            yMotor.spin(reverse, speed, percent);
+            while (yMotor.position(turns) > y_turns)
+            {}
+        }
+        yMotor.stop(brake);
+
+        x_cur = x_tar;
+        y_cur = y_tar;
+    }
 }

@@ -2,12 +2,6 @@
 
 using namespace vex;
 
-// A global instance of vex::brain used for printing to the IQ2 brain screen
-vex::brain       Brain;
-
-// define your global instances of motors and other devices here
-
-
 bool calibrateGantry() {
 
   // adjust later, placeholder values
@@ -66,7 +60,6 @@ bool calibrateGantry() {
   xMotor.setPosition(0, turns);
   yMotor.resetPosition();
   yMotor.setPosition(0, turns);
-  BrainInertial.resetRotation();
 
   if (foundHome) {
     TouchLED9.on(green);
