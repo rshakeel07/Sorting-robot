@@ -9,4 +9,5 @@ bool boxdetect()
 void nobox()
 {
     wait(30, seconds);
+    // SCAN FUNCTION NEED TO WAIT FOR SOMEONE TO DO THAT
 }
