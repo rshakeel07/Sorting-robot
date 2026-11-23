@@ -9,7 +9,8 @@ vex::brain Brain;
 #define CONVERSION_Y 1 // conversion factor for 1 turn to distance
 #define SPEED 1 // default motor speed
 #define BOXWIDTH 1 // box width for closing grippers
-
+#define XMAX 1 //max x length
+#define YMAX 1 // max y height
 
 int main() 
 {
