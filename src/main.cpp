@@ -8,6 +8,8 @@ vex::brain Brain;
 #define CONVERSION_X 1 // conversino factor for 1 turn to x distance
 #define CONVERSION_Y 1 // conversion factor for 1 turn to distance
 #define SPEED 1 // default motor speed
+#define BOXWIDTH 1 // box width for closing grippers
+
 
 int main() 
 {
