@@ -11,5 +11,11 @@ void shutdown(double &x_cur, double &y_cur)
     xMotor.stop(brake);
     yMotor.stop(brake);
     clawMotor.stop(brake);
+
+    // keep the message on the screen until the Touch LED is pressed
+    Brain.Screen.setCursor(3, 1);
+    Brain.Screen.print("Press LED to end");
+    while (!TouchLED9.pressing())
+    {}
     Brain.programStop();
 }

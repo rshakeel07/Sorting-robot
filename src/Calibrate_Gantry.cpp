@@ -55,6 +55,7 @@ bool calibrateGantry() {
             }
   }
   xMotor.stop(brake);
+  wait(500, msec); // let the carriage stop completely before zeroing
 
   //  zero x and y (y = 0 is where the claw was set by hand)
   xMotor.resetPosition();
